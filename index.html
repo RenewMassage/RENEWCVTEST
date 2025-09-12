@@ -80,7 +80,7 @@
   /* Hero */
   .hero{background:var(--cream); border-bottom:1px solid var(--line)}
   .hero-grid{
-    display:grid; grid-template-columns:1.05fr .95fr; gap:28px; align-items:center; padding:34px 0;
+    display:grid; grid-template-columns:1.05fr .95fr; gap:75px; align-items:center; padding:34px 0;
   }
   .kicker{color:var(--sage-700); font-weight:800; text-transform:uppercase; letter-spacing:.12em; font-size:.82rem}
   .lead{color:var(--muted)}
@@ -108,7 +108,7 @@
   .muted{color:var(--muted)}
   .checklist{list-style:none; padding:0; margin:.2rem 0 0}
   .checklist li{margin:.4rem 0; padding-left:1.6rem; position:relative}
-  .checklist li::before{content:"✓"; position:absolute; left:0; top:0; color:#3F5E55; font-weight:900}
+  .checklist li::before{content:"  "; position:absolute; left:0; top:0; color:#3F5E55; font-weight:900}
   .note{background:#F1F4F1; border:1px solid var(--line); border-radius:14px; padding:14px; color:#3a3f3d; font-size:.95rem}
   .aux-photo{aspect-ratio:4/3; border-radius:14px; overflow:hidden; border:1px solid var(--line)}
   .aux-photo img{width:100%; height:100%; object-fit:cover}
@@ -351,7 +351,179 @@
   }
 }
 
+/* LOCATION: 2 columns — left = list, right = full-width image */
+#location .feel-grid{
+  grid-template-columns: 1fr 1fr;   /* only affects the Location section */
+  align-items: start;
+  column-gap: 18px;
+}
+#location .location-right{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+#location .map-photo{
+  width: 100%;
+  height: auto;          /* no cropping */
+  border-radius: 14px;
+  border: 1px solid var(--line);
+}
 
+/* Mobile: stack naturally */
+@media (max-width: 980px){
+  #location .feel-grid{ grid-template-columns: 1fr; }
+}
+
+
+/* LOCATION: constrain width like other sections + prevent overflow */
+#location .wrap{
+  max-width: var(--maxw);   /* same cap as the rest of the site */
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+#location .feel-grid{
+  /* keep two columns but allow them to shrink within the cap */
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+  column-gap: 18px;
+}
+
+#location .map-photo{
+  display: block;
+  width: 100%;              /* fill right column, no overflow */
+  max-width: 100%;
+  height: auto;
+}
+
+
+/* LOCATION: use same column widths as other sections */
+#location .feel-grid{
+  grid-template-columns: 1.1fr .9fr;  /* left wider, right a bit narrower */
+  column-gap: 26px;                    /* match global gap */
+}
+
+/* keep the image fully within the right column */
+#location .map-photo{
+  display:block;
+  width:100%;
+  max-width:100%;
+  height:auto;
+}
+
+
+/* LOCATION: put the Google Maps button on its own line under 1) and align left */
+#location .checklist li.with-cta .cta{
+  display: block;        /* force a line break */
+  width: max-content;    /* keep natural pill width */
+  margin-top: 10px;      /* small space from the paragraph */
+}
+
+/* LOCATION: tighter line spacing for the address list only */
+#location .address-compact li{
+  line-height: 1.25;   /* was ~1.7 from body */
+  margin: .15rem 0;    /* reduce the extra gap between items */
+}
+
+/* keep the Maps button below the last line with same indent */
+#location .address-compact .cta{
+  display: block;
+  margin-top: 8px;
+  width: max-content;
+}
+
+
+/* LOCATION: tighter line spacing for the address list only */
+#location .address-compact li{
+  line-height: 1.25;   /* was ~1.7 from body */
+  margin: .15rem 0;    /* reduce the extra gap between items */
+}
+
+/* keep the Maps button below the last line with same indent */
+#location .address-compact .cta{
+  display: block;
+  margin-top: 8px;
+  width: max-content;
+}
+
+/* AFFILIATES: match site-wide section width */
+#affiliates .wrap{
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 16px;   /* same side gutters as others */
+}
+
+/* ===========================
+   PRINT-ONLY OPTIMIZATIONS
+   =========================== */
+   @media print {
+  @page { margin: 0.5in; }
+
+  /* Clean, ink-friendly base */
+  html, body { background:#fff !important; color:#000 !important; }
+  * { box-shadow:none !important; text-shadow:none !important; }
+
+  /* Ensure all content shows (disable reveal animations) */
+  [data-reveal] { opacity:1 !important; transform:none !important; }
+
+  /* Hide navigation/chrome */
+  header, .mobile, .burger { display:none !important; }
+
+  /* Keep content full width of paper margins */
+  .wrap { max-width:none !important; padding:0 !important; }
+
+  /* Simplify colored sections for print (no heavy fills) */
+  .hero, .band { background:#fff !important; border:0 !important; color:#000 !important; }
+  .svc, .card, .quote, .note, .service-circle {
+    background:#fff !important; border-color:#999 !important;
+  }
+
+  /* Readable type scales on paper */
+  body { font-size:12pt; line-height:1.5; }
+  h1 { font-size:22pt; }
+  h2 { font-size:16pt; }
+  h3 { font-size:12pt; }
+
+  /* Show URLs after links (useful on paper) */
+  a[href^="http"]:after {
+    content:" (" attr(href) ")"; font-weight:normal; font-size:10pt;
+  }
+
+  /* Make all grids stack for print (no clipped columns) */
+  .feel-grid, .split, .quotes { grid-template-columns:1fr !important; gap:12pt !important; }
+
+  /* Avoid awkward page breaks */
+  section, .feel, .about, .testimonials { break-inside:avoid; page-break-inside:avoid; margin-bottom:16pt !important; }
+
+  /* Ensure images scale nicely */
+  img { max-width:100% !important; height:auto !important; }
+
+  /* Replace custom checklist marker with a bullet for print clarity */
+  .checklist li { padding-left:0 !important; }
+  .checklist li::before { content:"• " !important; position:static !important; margin-right:6pt; }
+  
+  /* Buttons: render as simple outlined labels on paper */
+  .cta, .btn-secondary {
+    background:transparent !important; color:#000 !important;
+    border:1px solid #333 !important; box-shadow:none !important;
+  }
+}
+
+/* ===========================
+   EXTRA-SMALL MOBILE TWEAKS
+   (phones narrower than ~420px)
+   =========================== */
+@media (max-width: 420px){
+  .wrap { padding:0 12px; }
+  .hero-grid { gap:16px; }
+  .brand img { height:72px; }
+
+  /* Keep circles usable on tiny screens without overflowing */
+  .service-circle { width:160px; height:160px; }
+
+  /* Headings scale down a touch for narrow phones */
+  h1 { font-size: clamp(1.6rem, 7vw, 2.4rem); }
+  h2 { font-size: clamp(1.1rem, 4.5vw, 1.3rem); }
+}
 
 
 </style>
@@ -365,31 +537,33 @@
       <img src="https://res.cloudinary.com/dwsdvc5sd/image/upload/v1748282017/Newmassagesarahlogoiudearg_dc3zbr.png" alt="Renew Massage Therapy logo">
 
     </a>
-
     <nav aria-label="Primary">
-      <div class="navlist">
-        <a class="navlink" href="#services">Services</a>
-        <a class="navlink" href="#affiliates">Affiliates</a>
-        <a class="navlink" href="#about">About</a>
-        <a class="navlink" href="#contact">Location</a>
-        <a class="cta" href="https://renew-massage-therapy-llc.square.site/" target="_blank" rel="noopener">Book</a>
+        <div class="navlist">
+          <a class="navlink" href="#services">Services</a>
+          <a class="navlink" href="#affiliates">Affiliates</a>
+          <a class="navlink" href="#about">About</a>
+          <a class="navlink" href="#contact">Location</a>
+          <a class="navlink" href="#faq">FAQ</a>
+          <a class="cta" href="https://renew-massage-therapy-llc.square.site/" target="_blank" rel="noopener">Book</a>
+        </div>
+      </nav>
+      
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
       </div>
-    </nav>
-
-    <button class="burger" id="burger" aria-label="Menu" aria-expanded="false">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-    </button>
-  </div>
-
-  <!-- Mobile menu -->
-  <div class="mobile" id="mobileMenu" aria-label="Mobile menu">
-    <a href="#services" onclick="closeMenu()">Services</a>
-    <a href="#why" onclick="closeMenu()">Why Massage</a>
-    <a href="#about" onclick="closeMenu()">About</a>
-    <a href="#contact" onclick="closeMenu()">Location</a>
-    <a href="https://renew-massage-therapy-llc.square.site/" target="_blank" rel="noopener" onclick="closeMenu()">Book</a>
-  </div>
-</header>
+      
+      <!-- Mobile menu -->
+      <div class="mobile" id="mobileMenu" aria-label="Mobile menu">
+        <a href="#services" onclick="closeMenu()">Services</a>
+        <a href="#affiliates" onclick="closeMenu()">Why Massage</a>
+        <a href="#about" onclick="closeMenu()">About</a>
+        <a href="#contact" onclick="closeMenu()">Location</a>
+        <a href="#faq" onclick="closeMenu()">FAQ</a>
+        <a href="https://renew-massage-therapy-llc.square.site/" target="_blank" rel="noopener" onclick="closeMenu()">Book</a>
+      </div>
+      </header>
+      
 
 <!-- HERO -->
 <section id="top" class="hero">
@@ -540,65 +714,117 @@
   </section>
 
 <!-- location -->
+<!-- location -->
 <section id="location" class="feel">
     <div class="wrap">
-      <div class="feel-grid">
-        <div data-reveal>
-          <h2>Location</h2>
-          <p class="muted">We’ll create a simple plan that supports everyday ease and long-term comfort.</p>
-          <ul class="checklist">
-            <li>Persistent neck/shoulder tightness</li>
-            <li>Aches from desk work or driving</li>
-            <li>Tension headaches or jaw clenching</li>
-            <li>Pre/post-natal changes and recovery</li>
-            <li>Adding restorative self-care to a busy week</li>
+      <!-- Full-width heading + intro -->
+      <h2>Location</h2>
+      <p>The building is a small mall of shops with 2 parking lots to choose from!</p>
+
+
+<!-- ROW 1: Location 1 text (left) + image (right) -->
+<div class="feel-grid">
+    <div class="location-left" data-reveal>
+
+            <li>
+                <strong>Physical Address:</strong></li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Renew Massage Therapy LLC</li> 
+            <li> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2737 London Road, Suite A</li> 
+        <li>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eau Claire, WI 54701</li> 
+        <ul class="checklist">
+            <br><li class="with-cta">
+              1) London Rd parking lot enter through the Cosmo Proof door. You will see a wooden bench and a welcome door mat by our suite door as soon as you enter the building from this lot
+            </li>
+
+    </div>
+    <div class="location-right" data-reveal>
+        <ul class="checklist address-compact">
+        </ul>
+        <!-- Button sits under the text, inherits the same left indent from the <li> -->
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="cta"
+          type="button"
+          onclick="location.href='https://www.google.com/maps/search/?api=1&query=2737%20London%20Rd%2C%20Eau%20Claire%2C%20WI%2054701'">
+          Open in Google Maps
+        </button>
+      </li>
+    </ul>
+      <img class="map-photo"
+           src="https://res.cloudinary.com/dqzatipkx/image/upload/v1757648788/LONDONRD_fiz6gg.png"
+           alt="London Rd entrance">
+    </div>
+  </div>
+  
+  <div class="feel-grid">
+    <div class="location-left" data-reveal>
+        <ul class="checklist address-compact">
+            <li>
+                <strong>Mailing Address:</strong></li>
+                <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Renew Massage Therapy LLC</li> 
+            <li> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2734 Mall Drive</li> 
+        <li>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eau Claire, WI 54701</li> 
+<br>
+            </li>
           </ul>
-          <div class="note" style="margin-top:12px">
-            Add-ons by request: hot towels, stones, cupping, myofascial techniques.
-          </div>
-        </div>
-        <div data-reveal>
-          <div class="aux-photo" style="margin-bottom:12px">
-            <!-- Adobe Stock suggestion: “close up hands massage linen neutral palette” -->
-            <img src="https://res.cloudinary.com/dwsdvc5sd/image/upload/v1748282013/Entrance_dsbjf9.jpg" alt="Studio entrance">
-          </div>
-          <div class="note">
-            New studio: enter at “CosmoProf,” second door on the left—you’ll see the welcome mat and sign.
-          </div>
-        </div>
+          <ul class="checklist">
+            <li class="with-cta">
+            2)	Mall Dr parking lot enter through Wildflower Beauty entrance.  You will see signs to guide you down the hall and to the right. You will see a wooden bench and a welcome door mat by our suite door.
+            </li>
+          </ul>
+    </div>
+    <div class="location-right" data-reveal>
+        <ul class="checklist">
+            
+          </ul>
+        <!--<img class="map-photo"
+           src="https://res.cloudinary.com/dqzatipkx/image/upload/v1757648788/LONDONRD_fiz6gg.png"
+           alt="London Rd entrance">-->
+    </div>
+  </div>
+
+    </p>
+    </div>
+    
+  </section>
+  <!-- FAQ -->
+<section id="faq" class="feel">
+    <div class="wrap">
+      <h2>Frequently Asked Questions</h2>
+  
+      <div class="qa">
+        <h3>My first massage — what to expect?</h3>
+        <p>Arrive about 15 minutes early so you’ll have time to fill out a little bit of paperwork and settle in. Then we’ll chat about what you’re hoping to get out of your massage—whether it’s relaxation, pain relief, or just a moment to breathe. We’ll make sure you feel comfortable every step of the way. And remember your water bottle—hydration is key after a massage to help your body feel its best!</p>
+      </div>
+  
+      <div class="qa">
+        <h3>Do I need to bring anything to my appointment?</h3>
+        <p>A filled water bottle—hydration is key after a massage to help your body feel its best! If you forget, it’s no big deal—just remember to hydrate when you get home.</p>
+      </div>
+  
+      <div class="qa">
+        <h3>I am not comfortable undressing — is that an issue?</h3>
+        <p>Your comfort is the most important thing. Massage can be just as effective with clothing/undergarments on—we can adjust techniques to work through clothing or focus on areas like the hands, feet, neck, or shoulders. You’re always in control of what feels right for you.</p>
+      </div>
+  
+      <div class="qa">
+        <h3>I get nervous not knowing what to expect. Can you walk me through what an appointment is like?</h3>
+        <p>Of course! After we chat about your goals for the session, I’ll step out so you can undress to your comfort level and get settled on the table. You’ll have plenty of time, and I’ll knock before re-entering to make sure you’re ready—if you need a few more minutes, that’s totally okay. We take professionalism seriously. You’ll always be properly draped with a sheet or blanket, and only the area being worked on will be uncovered. We’ll check in throughout the session to make sure you’re comfortable and respected the entire time.</p>
       </div>
     </div>
   </section>
+  
 
 <!-- AFFILIATES -->
 <section id="affiliates" class="feel">
     <div class="wrap">
       <div class="feel-grid">
         <div data-reveal>
-          <h2>Why massage—right now</h2>
-          <p class="muted">We’ll create a simple plan that supports everyday ease and long-term comfort.</p>
+          <h2>Affiliates</h2>
           <ul class="checklist">
-            <li>Persistent neck/shoulder tightness</li>
-            <li>Aches from desk work or driving</li>
-            <li>Tension headaches or jaw clenching</li>
-            <li>Pre/post-natal changes and recovery</li>
-            <li>Adding restorative self-care to a busy week</li>
-          </ul>
-          <div class="note" style="margin-top:12px">
-            Add-ons by request: hot towels, stones, cupping, myofascial techniques.
-          </div>
-        </div>
-        <div data-reveal>
-          <div class="aux-photo" style="margin-bottom:12px">
-            <!-- Adobe Stock suggestion: “close up hands massage linen neutral palette” -->
-            <img src="https://res.cloudinary.com/dwsdvc5sd/image/upload/v1748282013/Entrance_dsbjf9.jpg" alt="Studio entrance">
-          </div>
-          <div class="note">
-            New studio: enter at “CosmoProf,” second door on the left—you’ll see the welcome mat and sign.
-          </div>
-        </div>
-      </div>
-    </div>
+            <li>• Member of Associated Bodywork and Massage Professionals (ABMP)</li>
+            <li>• Student member of The Society of Ortho-Bionomy International </li>
+            <li><a href="https://www.authenticcorepilates.com" target="_blank" rel="noopener">• Authentic Core Pilates</a></li>
+        </ul>
+
   </section>
 
 
