@@ -29,7 +29,7 @@
 
   /* NEW — announcement bar */
   .announce-bar{
-  background: #1B4D3E;   /* ← new banner color */
+  background: var(--sage);
     color: #fff;
     font-weight: 700;
     text-align: center;
@@ -324,6 +324,57 @@
     .brand img{ height: 56px; }
     body.scrolled .brand img{ height: 50px; }
   }
+
+
+
+  /* --- MOBILE OVERRIDES (place at the very end of your <style>) --- */
+
+/* 1) Hero: remove the left banner image on small screens so text goes full width */
+@media (max-width: 700px){
+  .hero-grid{
+    grid-template-columns: 1fr;   /* single column */
+    gap: 18px;
+  }
+  .hero .hero-photo,
+  .hero .photo-first{
+    display: none !important;     /* hide the rotating hero image */
+  }
+}
+
+/* 2) Services: two circles per row on mobile + slightly smaller fonts */
+@media (max-width: 540px){
+  /* Force two-up layout */
+  #services .tight-row:not(.w3-content){
+    gap: 12px;
+  }
+  #services .tight-row:not(.w3-content) .w3-quarter{
+    flex: 0 1 calc(50% - 12px) !important;
+    max-width: calc(50% - 12px) !important;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Keep circles nicely contained */
+  .service-circle{
+    width: 170px;
+    height: 170px;
+    padding: 10px;
+  }
+
+  /* Nudge typography down a bit so it stays inside the circle */
+  .service-circle h4{ font-size: 0.9em !important; line-height: 1.1; }
+  .service-circle h5{ font-size: 1.2em !important; line-height: 1.2; }
+  .service-circle .details{ font-size: 1.05em !important; line-height: 1.25; }
+}
+
+/* Optional: on extra-tiny screens keep circles from overflowing the column */
+@media (max-width: 380px){
+  .service-circle{
+    width: 150px;
+    height: 150px;
+  }
+}
+
 </style>
 </head>
 <body>
